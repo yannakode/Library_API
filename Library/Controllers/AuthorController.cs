@@ -53,5 +53,11 @@ namespace Library.Controllers
             bool delete = await _AuthorRepository.DeleteAuthor(id);
             return Ok(delete);
         }
+        [HttpGet("Search")]
+        public async Task<ActionResult<Author>> FindByName(string name)
+        {
+            Author authorName = await _AuthorRepository.GetAuthorByTitle(name);
+            return Ok(authorName);
+        }
     }
 }

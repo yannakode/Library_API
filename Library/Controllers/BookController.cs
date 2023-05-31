@@ -49,5 +49,11 @@ namespace Library.Controllers
             bool delete = await _bookRepository.DeleteBook(id);
             return Ok(delete);
         }
+        [HttpGet("Search")]
+        public async Task<ActionResult<Book>> FindBook(string name)
+        {
+            Book FindBookByTitle = await _bookRepository.GetBookByTitle(name);
+            return Ok(FindBookByTitle);
+        }
     }
 }

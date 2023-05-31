@@ -48,5 +48,11 @@ namespace Library.Repository
             await _dbContext.SaveChangesAsync();
             return existingBook;
         }
+
+        public async Task<Book> GetBookByTitle(string title)
+        {
+            Book GetByTitle = await _dbContext.Book.FirstOrDefaultAsync(b => b.Title == title);
+            return GetByTitle;
+        }
     }
 }

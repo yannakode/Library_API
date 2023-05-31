@@ -9,5 +9,6 @@ namespace Library.Repository.Interfaces
         Task<Book> AddBook (Book book);
         Task<Book> UpdateBook (int id, Book book); 
         Task<bool> DeleteBook (int id);
+        Task<Book> GetBookByTitle (string title);
     }
 }

@@ -9,6 +9,6 @@ namespace Library.Repository.Interfaces
         Task<Author> AddAuthor (Author Author);
         Task<Author> UpdateAuthor (int id, Author Author); 
         Task<bool> DeleteAuthor (int id);
-
+        Task<Book> GetAuthorByTitle(string title);
     }
 }

@@ -48,5 +48,10 @@ namespace Library.Repository
             await _dbContext.SaveChangesAsync();
             return existingAuthor;
         }
+        public async Task<Author> FindAuthorByName(string name)
+        {
+            Author authorName = await _dbContext.Author.FirstOrDefaultAsync(a => a.Name == name);
+            return authorName;
+        }
     }
 }
