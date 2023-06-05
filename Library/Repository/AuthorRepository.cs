@@ -1,5 +1,6 @@
 ﻿using Library.Data;
 using Library.Models;
+using Library.Models.DTO;
 using Library.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,44 +15,80 @@ namespace Library.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<Author> GetById(int id)
+        public async Task<AuthorDTO> GetById(int id)
         {
-            return await _dbContext.Author.FirstOrDefaultAsync(b => b.Id == id);
+            var Author = await _dbContext.Author.FirstOrDefaultAsync(a => a.Id == id);
+            var authorDTO = new AuthorDTO()
+            {
+                Id = id,
+                Name = Author.Name,
+                BookId = Author.BookId,
+                Book = Author.Book
+            };
+            return authorDTO;
         }
 
-        public async Task<List<Author>> ShowAllAuthors()
+        public async Task<List<AuthorDTO>> ShowAllAuthors()
         {
-            return await _dbContext.Author.ToListAsync();
+            var author = await _dbContext.Author.ToListAsync();
+            var authorsDTO = author.Select(a => new AuthorDTO()
+            {
+                Id=a.Id,
+                Name = a.Name,
+                BookId = a.BookId,
+                Book = a.Book
+            }).ToList();
+            return authorsDTO;
         }
-        public async Task<Author> AddAuthor(Author author)
+        public async Task<AuthorDTO> AddAuthor(AuthorDTO authorDTO)
         {
+            var author = new Author()
+            {
+                Id = authorDTO.Id,
+                Name = authorDTO.Name,
+                BookId = authorDTO.BookId,
+                Book = authorDTO.Book
+
+            };
             await _dbContext.Author.AddAsync(author);
             await _dbContext.SaveChangesAsync();
-            return author;
+
+            return authorDTO;
         }
 
         public async Task<bool> DeleteAuthor(int id)
         {
-            Author existingAuthor = await _dbContext.Author.FirstOrDefaultAsync(b => b.Id == id);
-            _dbContext.Author.Remove(existingAuthor);
+            Author authorToDelete = await _dbContext.Author.FirstOrDefaultAsync(b => b.Id == id);
+            _dbContext.Author.Remove(authorToDelete);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<Author> UpdateAuthor(int id, Author Author)
+        public async Task<AuthorDTO> UpdateAuthor(int id, AuthorDTO authorDTO)
         {
-            Author existingAuthor = await _dbContext.Author.FirstOrDefaultAsync(b => b.Id == id);
-            existingAuthor.Name = Author.Name;
-            existingAuthor.Book = Author.Book;
-            existingAuthor.BookId = Author.BookId;
-            _dbContext.Author.Update(existingAuthor);
+            Author authorToUpdate = await _dbContext.Author.FirstOrDefaultAsync(b => b.Id == id);
+            _dbContext.Author.Update(authorToUpdate);
             await _dbContext.SaveChangesAsync();
-            return existingAuthor;
+            var author = new AuthorDTO()
+            {
+                Id=id,
+                Name = authorDTO.Name,
+                BookId = authorDTO.BookId,
+                Book = authorDTO.Book
+            };
+            return authorDTO;
         }
-        public async Task<Author> GetAuthorByName(string name)
+        public async Task<AuthorDTO> GetAuthorByName(string name)
         {
-            Author authorName = await _dbContext.Author.FirstOrDefaultAsync(a => a.Name == name);
-            return authorName;
+            Author authorByName = await _dbContext.Author.FirstOrDefaultAsync(a => a.Name == name);
+            AuthorDTO author = new AuthorDTO()
+            {
+                Id= authorByName.Id, 
+                Name = authorByName.Name,
+                BookId = authorByName.BookId,
+                Book = authorByName.Book
+            };
+            return author;
         }
     }
 }

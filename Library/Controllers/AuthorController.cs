@@ -1,5 +1,6 @@
 ﻿using Library.Data;
 using Library.Models;
+using Library.Models.DTO;
 using Library.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ namespace Library.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Author>>> GetAllAuthors()
+        public async Task<ActionResult<List<AuthorDTO>>> GetAllAuthors()
         {
             return await _AuthorRepository.ShowAllAuthors();
         }
@@ -26,7 +27,7 @@ namespace Library.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Author>> GetAllAuthorsById(int id)
+        public async Task<ActionResult<AuthorDTO>> GetAllAuthorsById(int id)
         {
             if (id == 0)
             {
@@ -42,34 +43,34 @@ namespace Library.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Author>> FindByName(string name)
+        public async Task<ActionResult<AuthorDTO>> FindByName(string name)
         {
             if (name == null)
             {
                 return BadRequest();
             }
-            Author authorName = await _AuthorRepository.GetAuthorByName(name);
+            AuthorDTO authorName = await _AuthorRepository.GetAuthorByName(name);
             return Ok(authorName);
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Author>> CreateAuthor([FromBody] Author author)
+        public async Task<ActionResult<AuthorDTO>> CreateAuthor([FromBody] AuthorDTO author)
         {
             if(await _AuthorRepository.GetAuthorByName(author.Name) != null)
             {
                 ModelState.AddModelError("", "The author already exits");
                 return BadRequest(ModelState);
             }
-            Author AuthorModel = await _AuthorRepository.AddAuthor(author);
+            AuthorDTO AuthorModel = await _AuthorRepository.AddAuthor(author);
             return Ok(AuthorModel);
         }
         [HttpPut("id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Author>> UpdateAuthor([FromBody] Author Author, int id)
+        public async Task<ActionResult<AuthorDTO>> UpdateAuthor([FromBody] AuthorDTO Author, int id)
         {
             if (id == 0 || id < 0)
             {
@@ -79,7 +80,7 @@ namespace Library.Controllers
             {
                 return NotFound();
             }
-            Author existingAuthor = await _AuthorRepository.GetById(id);
+            AuthorDTO existingAuthor = await _AuthorRepository.GetById(id);
             Author.Name = existingAuthor.Name;
             Author.BookId = existingAuthor.BookId;
             Author.Book = existingAuthor.Book;
@@ -96,6 +97,7 @@ namespace Library.Controllers
             {
                 ModelState.AddModelError("", "The author doesn't exits");
                 return BadRequest(ModelState);
+
             }
             if (id == 0 || id < 0)
             {

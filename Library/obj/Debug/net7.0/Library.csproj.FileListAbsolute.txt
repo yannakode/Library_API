@@ -74,3 +74,4 @@ C:\Users\yanna\Videos\Projetos\Library\Library\obj\Debug\net7.0\refint\Library.d
 C:\Users\yanna\Videos\Projetos\Library\Library\obj\Debug\net7.0\Library.pdb
 C:\Users\yanna\Videos\Projetos\Library\Library\obj\Debug\net7.0\Library.genruntimeconfig.cache
 C:\Users\yanna\Videos\Projetos\Library\Library\obj\Debug\net7.0\ref\Library.dll
+C:\Users\yanna\Videos\Projetos\Library\Library\bin\Debug\net7.0\System.Web.Cors.dll

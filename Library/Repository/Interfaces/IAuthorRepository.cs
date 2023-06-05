@@ -1,4 +1,5 @@
 ﻿using Library.Models;
+using Library.Models.DTO;
 
 namespace Library.Repository.Interfaces
 {
@@ -6,8 +7,8 @@ namespace Library.Repository.Interfaces
     {
         Task<List<Author>> ShowAllAuthors();
         Task<Author> GetById(int id);
-        Task<Author> AddAuthor (Author Author);
-        Task<Author> UpdateAuthor (int id, Author Author); 
+        Task<Author> AddAuthor (AuthorDTO Author);
+        Task<Author> UpdateAuthor (int id, AuthorDTO Author); 
         Task<bool> DeleteAuthor (int id);
         Task<Author> GetAuthorByName(string title);
     }

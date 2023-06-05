@@ -1,5 +1,6 @@
 ﻿using Library.Data;
 using Library.Models;
+using Library.Models.DTO;
 using Library.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,20 +15,43 @@ namespace Library.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<Book> GetById(int id)
+        public async Task<BookDTO> GetById(int id)
         {
-            return await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
+            var Book = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
+            var BookDTO = new BookDTO()
+            {
+                Id = id,
+                Title = Book.Title,
+                Description = Book.Description,
+                Status = Book.Status
+             };
+            return BookDTO;
         }
 
-        public async Task<List<Book>> ShowAllBooks()
+        public async Task<List<BookDTO>> ShowAllBooks()
         {
-            return await _dbContext.Book.ToListAsync();
+            var Books = await _dbContext.Book.ToListAsync();
+            var BookDTO = Books.Select(book => new BookDTO()
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Description = book.Description,
+                Status = book.Status
+            }).ToList();
+            return BookDTO;
         }
-        public async Task<Book> AddBook(Book book)
+        public async Task<BookDTO> AddBook(BookDTO bookDTO)
         {
+            var book = new Book()
+            {
+                Id = bookDTO.Id,
+                Title = bookDTO.Title,
+                Description = bookDTO.Description,
+                Status = bookDTO.Status
+            };
             await _dbContext.Book.AddAsync(book);
             await _dbContext.SaveChangesAsync();
-            return book;
+            return bookDTO;
         }
 
         public async Task<bool> DeleteBook(int id)
@@ -38,21 +62,36 @@ namespace Library.Repository
             return true;
         }
 
-        public async Task<Book> UpdateBook(int id, Book book)
+        public async Task<BookDTO> UpdateBook(int id, BookDTO bookDTO)
         {
+            var book = new Book()
+            {
+                Id = bookDTO.Id,
+                Title = bookDTO.Title,
+                Description = bookDTO.Description,
+                Status = bookDTO.Status
+            };
             Book existingBook = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
             existingBook.Title = book.Title;
             existingBook.Description = book.Description;
             existingBook.Status = book.Status;
             _dbContext.Book.Update(existingBook);
             await _dbContext.SaveChangesAsync();
-            return existingBook;
+            return bookDTO;
         }
 
-        public async Task<Book> GetBookByTitle(string title)
+        public async Task<BookDTO> GetBookByTitle(string title)
         {
-            Book GetByTitle = await _dbContext.Book.FirstOrDefaultAsync(b => b.Title == title);
-            return GetByTitle;
+            Book Book = await _dbContext.Book.FirstOrDefaultAsync(b => b.Title == title);
+            var bookDTO = new BookDTO()
+            {
+                Id = Book.Id,
+                Title = Book.Title,
+                Description = Book.Description,
+                Status = Book.Status
+            };
+            
+            return bookDTO;
         }
     }
 }

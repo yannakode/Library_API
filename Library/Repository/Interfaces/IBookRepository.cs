@@ -1,14 +1,15 @@
 ﻿using Library.Models;
+using Library.Models.DTO;
 
 namespace Library.Repository.Interfaces
 {
     public interface IBookRepository
     {
-        Task<List<Book>> ShowAllBooks();
-        Task<Book> GetById(int id);
-        Task<Book> AddBook (Book book);
-        Task<Book> UpdateBook (int id, Book book); 
+        Task<List<BookDTO>> ShowAllBooks();
+        Task<BookDTO> GetById(int id);
+        Task<BookDTO> AddBook (BookDTO book);
+        Task<BookDTO> UpdateBook (int id, BookDTO book); 
         Task<bool> DeleteBook (int id);
-        Task<Book> GetBookByTitle (string title);
+        Task<BookDTO> GetBookByTitle (string title);
     }
 }
