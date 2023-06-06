@@ -20,14 +20,8 @@ namespace Library.Repository
         public async Task<BookDTO> GetById(int id)
         {
             var Book = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
-            var BookDTO = new BookDTO()
-            {
-                Id = id,
-                Title = Book.Title,
-                Description = Book.Description,
-                Status = Book.Status
-             };
-            return BookDTO;
+            var bookDTO = _mapper.Map<BookDTO>(Book);
+            return bookDTO;
         }
 
         public async Task<IEnumerable<BookDTO>> ShowAllBooks()
@@ -49,8 +43,8 @@ namespace Library.Repository
 
         public async Task<bool> DeleteBook(int id)
         {
-            Book existingBook = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
-            _dbContext.Book.Remove(existingBook);
+            Book bookToDelete = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
+            _dbContext.Book.Remove(bookToDelete);
             await _dbContext.SaveChangesAsync();
             return true;
         }

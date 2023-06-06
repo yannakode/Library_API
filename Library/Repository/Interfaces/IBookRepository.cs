@@ -5,7 +5,7 @@ namespace Library.Repository.Interfaces
 {
     public interface IBookRepository
     {
-        Task<List<BookDTO>> ShowAllBooks();
+        Task<IEnumerable<BookDTO>> ShowAllBooks();
         Task<BookDTO> GetById(int id);
         Task<BookDTO> AddBook (BookDTO book);
         Task<BookDTO> UpdateBook (int id, BookDTO book); 
