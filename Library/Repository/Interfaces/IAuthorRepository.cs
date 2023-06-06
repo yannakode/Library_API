@@ -5,11 +5,11 @@ namespace Library.Repository.Interfaces
 {
     public interface IAuthorRepository
     {
-        Task<List<Author>> ShowAllAuthors();
-        Task<Author> GetById(int id);
-        Task<Author> AddAuthor (AuthorDTO Author);
-        Task<Author> UpdateAuthor (int id, AuthorDTO Author); 
+        Task<List<AuthorDTO>> ShowAllAuthors();
+        Task<AuthorDTO> GetById(int id);
+        Task<AuthorDTO> AddAuthor (AuthorDTO Author);
+        Task<AuthorDTO> UpdateAuthor (int id, AuthorDTO Author); 
         Task<bool> DeleteAuthor (int id);
-        Task<Author> GetAuthorByName(string title);
+        Task<AuthorDTO> GetAuthorByName(string title);
     }
 }

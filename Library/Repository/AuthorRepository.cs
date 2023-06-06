@@ -17,7 +17,7 @@ namespace Library.Repository
 
         public async Task<AuthorDTO> GetById(int id)
         {
-            var Author = await _dbContext.Author.FirstOrDefaultAsync(a => a.Id == id);
+            var Author = await _dbContext.Author.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
             var authorDTO = new AuthorDTO()
             {
                 Id = id,
@@ -58,7 +58,7 @@ namespace Library.Repository
 
         public async Task<bool> DeleteAuthor(int id)
         {
-            Author authorToDelete = await _dbContext.Author.FirstOrDefaultAsync(b => b.Id == id);
+            Author authorToDelete = await _dbContext.Author.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
             _dbContext.Author.Remove(authorToDelete);
             await _dbContext.SaveChangesAsync();
             return true;
@@ -80,7 +80,7 @@ namespace Library.Repository
         }
         public async Task<AuthorDTO> GetAuthorByName(string name)
         {
-            Author authorByName = await _dbContext.Author.FirstOrDefaultAsync(a => a.Name == name);
+            Author authorByName = await _dbContext.Author.AsNoTracking().FirstOrDefaultAsync(a => a.Name == name);
             AuthorDTO author = new AuthorDTO()
             {
                 Id= authorByName.Id, 

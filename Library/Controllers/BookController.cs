@@ -4,6 +4,7 @@ using Library.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Library.Models.DTO;
+using AutoMapper;
 
 namespace Library.Controllers
 {
@@ -12,15 +13,18 @@ namespace Library.Controllers
     public class BookController : Controller
     {
         private readonly IBookRepository _bookRepository;
+        private readonly IMapper _mapper;
 
-        public BookController(IBookRepository bookRepository)
+        public BookController(IBookRepository bookRepository, IMapper mapper)
         {
             _bookRepository = bookRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<BookDTO>>> GetAllBooks()
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetAllBooks()
         {
+
             return await _bookRepository.ShowAllBooks();
         }
 
@@ -32,15 +36,7 @@ namespace Library.Controllers
         [HttpPost]
         public async Task<ActionResult<BookDTO>> CreateBook([FromForm]Book book)
         {
-            if (book.Photo != null && book.Photo.Length > 0)
-            {
-                var filePath = Path.Combine("Storage", book.Photo.FileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await book.Photo.CopyToAsync(stream);
-                }
-            }
+            
             return Ok(book);
         }
         [HttpPut("id")]

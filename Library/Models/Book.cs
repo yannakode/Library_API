@@ -8,6 +8,5 @@ namespace Library.Models
         public string? Title { get; set; }
         public string? Description { get; set; }
         public StatusBook Status { get; set; }
-        public IFormFile Photo { get; set; }
     }
 }

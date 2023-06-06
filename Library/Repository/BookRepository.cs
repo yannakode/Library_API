@@ -1,4 +1,5 @@
-﻿using Library.Data;
+﻿using AutoMapper;
+using Library.Data;
 using Library.Models;
 using Library.Models.DTO;
 using Library.Repository.Interfaces;
@@ -9,6 +10,7 @@ namespace Library.Repository
     public class BookRepository : IBookRepository
     {
         public readonly LibraryDbContext _dbContext;
+        private readonly IMapper _mapper;
 
         public BookRepository(LibraryDbContext dbContext)
         {
@@ -28,30 +30,21 @@ namespace Library.Repository
             return BookDTO;
         }
 
-        public async Task<List<BookDTO>> ShowAllBooks()
+        public async Task<IEnumerable<BookDTO>> ShowAllBooks()
         {
-            var Books = await _dbContext.Book.ToListAsync();
-            var BookDTO = Books.Select(book => new BookDTO()
-            {
-                Id = book.Id,
-                Title = book.Title,
-                Description = book.Description,
-                Status = book.Status
-            }).ToList();
-            return BookDTO;
+            IEnumerable<Book> bookList = await _dbContext.Book.ToListAsync();
+            IEnumerable<BookDTO> bookDTO = _mapper.Map<IEnumerable<BookDTO>>(bookList);
+            return bookDTO;
         }
         public async Task<BookDTO> AddBook(BookDTO bookDTO)
         {
-            var book = new Book()
-            {
-                Id = bookDTO.Id,
-                Title = bookDTO.Title,
-                Description = bookDTO.Description,
-                Status = bookDTO.Status
-            };
-            await _dbContext.Book.AddAsync(book);
+            var newBook = _mapper.Map<Book>(bookDTO);
+
+            await _dbContext.Book.AddAsync(newBook);
             await _dbContext.SaveChangesAsync();
-            return bookDTO;
+
+            var newBookDTO = _mapper.Map<BookDTO>(newBook);
+            return newBookDTO;
         }
 
         public async Task<bool> DeleteBook(int id)
@@ -64,33 +57,23 @@ namespace Library.Repository
 
         public async Task<BookDTO> UpdateBook(int id, BookDTO bookDTO)
         {
-            var book = new Book()
-            {
-                Id = bookDTO.Id,
-                Title = bookDTO.Title,
-                Description = bookDTO.Description,
-                Status = bookDTO.Status
-            };
-            Book existingBook = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
-            existingBook.Title = book.Title;
-            existingBook.Description = book.Description;
-            existingBook.Status = book.Status;
-            _dbContext.Book.Update(existingBook);
+            var book = _mapper.Map<Book>(bookDTO);
+            Book bookToUpdate = await _dbContext.Book.FirstOrDefaultAsync(b => b.Id == id);
+            bookToUpdate.Title = book.Title;
+            bookToUpdate.Description = book.Description;
+            bookToUpdate.Status = book.Status;
+            _dbContext.Book.Update(bookToUpdate);
             await _dbContext.SaveChangesAsync();
-            return bookDTO;
+            var updatedBookDTO = _mapper.Map<BookDTO>(bookToUpdate);
+            return updatedBookDTO;
         }
 
         public async Task<BookDTO> GetBookByTitle(string title)
         {
-            Book Book = await _dbContext.Book.FirstOrDefaultAsync(b => b.Title == title);
-            var bookDTO = new BookDTO()
-            {
-                Id = Book.Id,
-                Title = Book.Title,
-                Description = Book.Description,
-                Status = Book.Status
-            };
-            
+            Book book = await _dbContext.Book.FirstOrDefaultAsync(b => b.Title == title);
+
+            var bookDTO = _mapper.Map<BookDTO>(book);
+
             return bookDTO;
         }
     }
