@@ -5,7 +5,7 @@ namespace Library.Repository.Interfaces
 {
     public interface IAuthorRepository
     {
-        Task<List<AuthorDTO>> ShowAllAuthors();
+        Task<IEnumerable<AuthorDTO>> ShowAllAuthors();
         Task<AuthorDTO> GetById(int id);
         Task<AuthorDTO> AddAuthor (AuthorDTO Author);
         Task<AuthorDTO> UpdateAuthor (int id, AuthorDTO Author); 

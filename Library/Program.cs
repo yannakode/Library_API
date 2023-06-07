@@ -1,4 +1,5 @@
 
+using AutoMapper;
 using Library.Data;
 using Library.Repository;
 using Library.Repository.Interfaces;
@@ -13,7 +14,7 @@ namespace Library
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddAutoMapper(typeof(MappingConfig));
             builder.Services.AddControllers();
             builder.Services.AddDbContext<LibraryDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -21,9 +22,10 @@ namespace Library
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<Profile, MappingConfig>();
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-
+            //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -33,9 +35,9 @@ namespace Library
                         .AllowAnyHeader();
                 });
             });
-
+            
             var app = builder.Build();
-
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

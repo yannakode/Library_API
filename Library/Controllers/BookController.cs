@@ -13,27 +13,34 @@ namespace Library.Controllers
     public class BookController : Controller
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IMapper _mapper;
 
-        public BookController(IBookRepository bookRepository, IMapper mapper)
+        public BookController(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<BookDTO>>> GetAllBooks()
         {
-
-            return await _bookRepository.ShowAllBooks();
+            return Ok(await _bookRepository.ShowAllBooks());
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<BookDTO>> GetAllBooksById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<BookDTO>> GetBookById(int id)
         {
-            return await _bookRepository.GetById(id);
+            return Ok(await _bookRepository.GetById(id));
         }
+
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookDTO>> CreateBook([FromForm]Book book)
         {
             
@@ -49,13 +56,21 @@ namespace Library.Controllers
             await _bookRepository.UpdateBook(id ,bookToUpdate);
             return Ok(bookToUpdate);
         }
+
         [HttpDelete("id")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<bool>> DeleteBook(int id)
         {         
             bool delete = await _bookRepository.DeleteBook(id);
             return Ok(delete);
         }
+
         [HttpGet("Search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookDTO>> FindBook(string name)
         {
             BookDTO FindBookByTitle = await _bookRepository.GetBookByTitle(name);

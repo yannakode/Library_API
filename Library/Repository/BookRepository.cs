@@ -9,12 +9,13 @@ namespace Library.Repository
 {
     public class BookRepository : IBookRepository
     {
-        public readonly LibraryDbContext _dbContext;
+        private readonly LibraryDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public BookRepository(LibraryDbContext dbContext)
+        public BookRepository(LibraryDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<BookDTO> GetById(int id)
@@ -27,8 +28,8 @@ namespace Library.Repository
         public async Task<IEnumerable<BookDTO>> ShowAllBooks()
         {
             IEnumerable<Book> bookList = await _dbContext.Book.ToListAsync();
-            IEnumerable<BookDTO> bookDTO = _mapper.Map<IEnumerable<BookDTO>>(bookList);
-            return bookDTO;
+            IEnumerable<BookDTO> bookListDTO = _mapper.Map<IEnumerable<BookDTO>>(bookList);
+            return bookListDTO;
         }
         public async Task<BookDTO> AddBook(BookDTO bookDTO)
         {
