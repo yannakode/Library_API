@@ -13,6 +13,12 @@ namespace Library
 
             CreateMap<Book, BookDTO>().ReverseMap();
             CreateMap<BookDTO, Book>().ReverseMap();
+
+            CreateMap<Author, AuthorDTO>();
+            CreateMap<AuthorDTO, Author>();
+
+            CreateMap<Author, AuthorDTO>().ReverseMap();
+            CreateMap<AuthorDTO, Author>().ReverseMap();
         }
     }
 }

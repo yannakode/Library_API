@@ -18,16 +18,19 @@ namespace Library.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AuthorDTO>>> GetAllAuthors()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAllAuthors()
         {
-            return await _AuthorRepository.ShowAllAuthors();
+            return Ok(await _AuthorRepository.ShowAllAuthors());
         }
 
         [HttpGet("id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AuthorDTO>> GetAllAuthorsById(int id)
+        public async Task<ActionResult<AuthorDTO>> GetAuthorsById(int id)
         {
             if (id == 0)
             {
@@ -49,8 +52,8 @@ namespace Library.Controllers
             {
                 return BadRequest();
             }
-            AuthorDTO authorName = await _AuthorRepository.GetAuthorByName(name);
-            return Ok(authorName);
+            AuthorDTO author = await _AuthorRepository.GetAuthorByName(name);
+            return Ok(author);
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -63,8 +66,8 @@ namespace Library.Controllers
                 ModelState.AddModelError("", "The author already exits");
                 return BadRequest(ModelState);
             }
-            AuthorDTO AuthorModel = await _AuthorRepository.AddAuthor(author);
-            return Ok(AuthorModel);
+            AuthorDTO newAuthor = await _AuthorRepository.AddAuthor(author);
+            return Ok(newAuthor);
         }
         [HttpPut("id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,12 +83,12 @@ namespace Library.Controllers
             {
                 return NotFound();
             }
-            AuthorDTO existingAuthor = await _AuthorRepository.GetById(id);
-            Author.Name = existingAuthor.Name;
-            Author.BookId = existingAuthor.BookId;
-            Author.Book = existingAuthor.Book;
-            await _AuthorRepository.UpdateAuthor(id, existingAuthor);
-            return Ok(existingAuthor);
+            AuthorDTO authorToUpdate = await _AuthorRepository.GetById(id);
+            Author.Name = authorToUpdate.Name;
+            Author.BookId = authorToUpdate.BookId;
+            Author.Book = authorToUpdate.Book;
+            await _AuthorRepository.UpdateAuthor(id, authorToUpdate);
+            return Ok(authorToUpdate);
         }
         [HttpDelete("id")]
         [ProducesResponseType(StatusCodes.Status200OK)]

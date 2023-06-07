@@ -11,5 +11,6 @@ namespace Library.Repository.Interfaces
         Task<BookDTO> UpdateBook (int id, BookDTO book); 
         Task<bool> DeleteBook (int id);
         Task<BookDTO> GetBookByTitle (string title);
+        Task<BookDTO> UploadImage (BookDTO bookDTO);
     }
 }
