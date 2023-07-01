@@ -23,6 +23,7 @@ namespace Library
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<Profile, MappingConfig>();
+
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
             //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
